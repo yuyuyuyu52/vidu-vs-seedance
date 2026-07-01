@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vidu vs Seedance 2.0 · 视频效果评测</title>
+<style>
+  :root{
+    --paper:#fdfdfb;
+    --ink:#1a1a1a; --ink2:#3f3f3d; --mute:#8c8c86; --faint:#b9b9b2;
+    --line:#e7e7e1; --line2:#efefe9;
+    --frame:#f4f3ef;
+    --accent:#b4441f;               /* 极少量使用的赤陶红 */
+    --serif:Georgia,"Times New Roman","Songti SC","Noto Serif SC",serif;
+    --sans:-apple-system,BlinkMacSystemFont,system-ui,"PingFang SC","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  .rail{max-width:1040px; margin:0 auto; padding:0 28px}
+
+  /* ---------- Masthead ---------- */
+  .masthead{padding:76px 0 30px}
+  .eyebrow{
+    display:flex; align-items:center; gap:9px;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--mute);
+  }
+  .eyebrow::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent)}
+  .masthead h1{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(32px,5.4vw,50px); line-height:1.08; letter-spacing:-.005em;
+    margin:16px 0 0;
+  }
+  .masthead h1 .vs{font-style:italic; color:var(--faint); font-size:.62em; margin:0 .22em; font-weight:400}
+  .deck{
+    font-size:17.5px; line-height:1.62; color:var(--ink2);
+    max-width:600px; margin:18px 0 0;
+  }
+  .byline{
+    display:flex; flex-wrap:wrap; gap:14px; align-items:center;
+    font-size:13px; color:var(--mute); margin-top:22px;
+    padding-top:20px; border-top:1px solid var(--line);
+  }
+  .byline .sep{color:var(--faint)}
+
+  /* ---------- Row (一组对比) ---------- */
+  .rows{padding-bottom:20px}
+  .row{padding:44px 0; border-top:1px solid var(--line)}
+  .row:first-child{border-top:none; padding-top:30px}
+  .row-head{display:flex; gap:20px; align-items:baseline}
+  .idx{
+    font-family:var(--serif); font-size:26px; color:var(--faint);
+    line-height:1; flex:none; min-width:38px; font-variant-numeric:tabular-nums;
+  }
+  .prompt-block{flex:1; min-width:0}
+  .ptag{
+    display:block; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--mute); margin-bottom:7px;
+  }
+  .prompt{
+    margin:0; font-size:15.5px; line-height:1.76; color:var(--ink2);
+    white-space:pre-wrap; word-break:break-word;
+  }
+
+  /* ---------- Pair (双视频) ---------- */
+  .pair{
+    display:grid; grid-template-columns:1fr 1fr; gap:22px;
+    margin-top:26px; margin-left:58px;      /* 与序号对齐缩进 */
+  }
+  figure.clip{margin:0}
+  figcaption{display:flex; align-items:baseline; gap:9px; margin-bottom:10px}
+  .name{font-size:14px}
+  .name.vidu{color:var(--ink); font-weight:650}
+  .name.sd{color:var(--mute); font-weight:500}
+  .sub{font-size:12px; color:var(--faint)}
+  .frame{
+    aspect-ratio:16/9; background:var(--frame);
+    border:1px solid var(--line); border-radius:7px; overflow:hidden;
+  }
+  .frame video{width:100%; height:100%; object-fit:contain; display:block; background:var(--frame)}
+  /* 竖版组：改用竖版容器并限高，避免竖屏视频两侧大留白、版面被撑高 */
+  .pair.portrait .frame{aspect-ratio:9/16; max-height:560px; width:auto; margin-inline:auto}
+
+  /* ---------- Controls ---------- */
+  .ctrl{display:flex; align-items:center; gap:11px; margin-top:16px; margin-left:58px}
+  button{font-family:var(--sans); cursor:pointer}
+  .b-sync{
+    font-size:13px; font-weight:550; color:var(--paper); background:var(--ink);
+    border:1px solid var(--ink); border-radius:6px; padding:9px 17px;
+    transition:background .15s; min-width:104px;
+  }
+  .b-sync:hover{background:#000}
+  .b-replay{
+    font-size:13px; color:var(--ink2); background:transparent;
+    border:1px solid #d8d8d1; border-radius:6px; padding:9px 15px; transition:border-color .15s;
+  }
+  .b-replay:hover{border-color:var(--ink2)}
+  .tip{font-size:12.5px; color:var(--faint); margin-left:auto}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line); margin-top:10px}
+  .foot{padding:34px 0 72px; font-size:13px; color:var(--mute); line-height:1.85}
+  .foot b{color:var(--ink2); font-weight:600}
+
+  @media (max-width:760px){
+    .rail{padding:0 20px}
+    .masthead{padding:52px 0 24px}
+    .row-head{gap:14px}
+    .idx{min-width:26px; font-size:22px}
+    .pair{grid-template-columns:1fr; gap:20px; margin-left:0}
+    .ctrl{margin-left:0; flex-wrap:wrap}
+    .tip{display:none}
+  }
+</style>
+</head>
+<body>
+  <header class="masthead rail">
+    <div class="eyebrow">模型效果评测 · Model Benchmark</div>
+    <h1>Vidu <span class="vs">vs</span> Seedance 2.0</h1>
+    <p class="deck">同一段提示词、同一组输入，两款视频模型的直出结果逐组并排。不加解说，让画面自己比。</p>
+    <div class="byline">
+      <span><b id="b-groups">14</b> 组对比</span><span class="sep">·</span>
+      <span><b id="b-videos">28</b> 段视频</span><span class="sep">·</span>
+      <span>2026 年 7 月</span>
+    </div>
+  </header>
+
+  <main class="rail rows" id="app"></main>
+
+  <footer>
+    <div class="rail foot">
+      <div><b>Vidu vs Seedance 2.0 · 视频效果评测</b></div>
+      <div>素材来源：飞书文档《Vidu vs SD 2.0：效果对标，能力更全，价格更优》</div>
+      <div id="foot-meta"></div>
+    </div>
+  </footer>
+
+<script>
+const GROUPS = [{"id": 1, "prompt": "图 1 人物从图 2 尽头慢慢向前走近镜头，时不时贴墙将枪准至镜头前方，电影长镜头，人物逐渐走向镜头前。", "vidu": "g01_vidu.mp4", "sd": "g01_sd.mp4", "orient": "portrait"}, {"id": 2, "prompt": "浓雾弥漫。巨大佛像隐在雾中，只露出轮廓与低垂的眼睑。镜头缓缓向下摇，穿过雾气，露出破旧屋舍的剪影。两个人@图片 2@图片 3 影一左一右立在屋舍前的空地上，模糊如墨痕。 男人（顾青鹤）@图片 2 从雾中显出面庞，鬓角微湿，眉峰紧锁。他微微眯眼辨认对方，嘴角慢慢牵起一个复杂的弧度——意外、警惕、又有一丝说不清的感慨。 @图片 2 顾青鹤：”多年不见……竟在这种地方。”", "vidu": "g02_vidu.mp4", "sd": "g02_sd.mp4", "orient": "landscape"}, {"id": 3, "prompt": "首帧：图 1 人物双手握着图 3 中的刀，从上往下用力一砍，刀爆发出强烈的冲击气浪， 中间帧：镜头跟随向前冲的气浪， 尾帧：气浪撞击在图 2 人物的身体，让图 2 中的人物倒飞了出去", "vidu": "g03_vidu.mp4", "sd": "g03_sd.mp4", "orient": "landscape"}, {"id": 4, "prompt": "近景，图 3 为场景，侧面仰拍图 1 男子，图 2 为男生的侧脸，他坐在书桌后的男子邪恶地笑，他从椅子上站起来，收敛笑容，然后用手指向前方发出命令，“速去把那杯毒酒拿来！”，侧面烛台光源，小幅度运镜。", "vidu": "g04_vidu.mp4", "sd": "g04_sd.mp4", "orient": "landscape"}, {"id": 5, "prompt": "0-2s 一个年轻女性站在室内，手里拿着一罐冰镇可乐。2-5s 她先把易拉罐打开，喝一小口，然后把可乐放在脸旁边，看向镜头，表情放松又满足。 5s 开始：她自然地对镜头说英文： \"This is the kind of cold， refreshing drink I always come back to。 It feels familiar, crisp, and instantly relaxing.\" 注意：开罐动作、喝水动作和手部动作要自然。 画面保持清晰、商品导向、容易理解。", "vidu": "g05_vidu.mp4", "sd": "g05_sd.mp4", "orient": "landscape"}, {"id": 6, "prompt": "[@图 1]切镜 1（0-2s）： 超特写，微距运镜，古风仙侠男子指尖凝聚出一点星火，星火逐渐膨胀，化作一颗燃烧的火球，镜头聚焦在他指尖的火焰，火焰纹理清晰可见，映出他冷峻的眼神。 切镜 2（2-5s）： 环绕运镜，男子将火球掷向空中，火球在空中炸裂，化作无数火蝶，火蝶飞舞时留下金色轨迹，镜头环绕他，火蝶在他酒红华服周围盘旋。 切镜 3（5-8s）： 极远景，俯拍推进，火蝶汇聚成巨大的火凤，火凤展翅翱翔，掠过云海，镜头跟随火凤高速推进，最终火凤撞向远方的山峰，引发剧烈爆炸，火焰染红半边天。", "vidu": "g06_vidu.mp4", "sd": "g06_sd.mp4", "orient": "landscape"}, {"id": 7, "prompt": "史诗奇幻电影质感，展现少年骑乘翼龙穿越云海的壮阔场景，8 秒视频， 智能规划切镜", "vidu": "g07_vidu.mp4", "sd": "g07_sd.mp4", "orient": "landscape"}, {"id": 8, "prompt": "史诗奇幻电影级视频，展现巨人温柔托举少年的场景。运镜：远景缓慢推进→弧形轨道环绕→低角度仰拍特写→慢推聚焦眼神→俯瞰拉升全景。动态细节：晚风拂动斗篷与发丝，云层流动，湖面波光粼粼。光影：黄昏侧逆光，暖金色轮廓光，壮阔湖山背景，氛围温暖厚重，电影级 4K 画质，运镜丝滑无卡顿。", "vidu": "g08_vidu.mp4", "sd": "g08_sd.mp4", "orient": "landscape"}, {"id": 9, "prompt": "楚寒周身金光爆发，凝聚出金色战甲，气势暴涨，徐震天震惊不已，楚寒冷言宣判。", "vidu": "g09_vidu.mp4", "sd": "g09_sd.mp4", "orient": "portrait"}, {"id": 10, "prompt": "楚寒挣扎着从石壁中爬出，眼中战意燃烧，激活九霄云纹戒，金色力量涌入体内。", "vidu": "g10_vidu.mp4", "sd": "g10_sd.mp4", "orient": "portrait"}, {"id": 11, "prompt": "楚寒被金色巨掌击中，倒飞撞入山壁，楚云绝望呼喊，徐震天冷酷逼近", "vidu": "g11_vidu.mp4", "sd": "g11_sd.mp4", "orient": "portrait"}, {"id": 12, "prompt": "酒店宴会厅，王桂兰（画面右侧，坐在席位上） 苏文博、许向暖（画面左侧远处，敬酒中） 婚礼现场座无虚席，坐满宾客 苏文博的母亲王桂兰坐在席位上，眉头紧紧皱起，面露不满。镜头固定，捕捉她皱眉的表情。 镜头推进王桂兰面部，她眼神阴沉，嘴角下撇，带着嫌弃和不满。强调她的不悦。", "vidu": "g12_vidu.mp4", "sd": "g12_sd.mp4", "orient": "portrait"}, {"id": 13, "prompt": "许向暖愣了一下，随即眼睛一亮，脸上露出恍然的表情，语气带着惊喜：“是你啊！那天谢谢你帮忙！”镜头固定，捕捉她认出恩人的神态变化。 切至苏文博，他温和一笑，语气谦逊：“举手之劳，对了，我叫苏文博，是在云城大学就职。”镜头固定，捕捉他儒雅的气质。 许向暖瞪大眼睛，嘴巴微张，满脸不可置信，声音拔高：“你是大学教授？”她身体微微前倾，表现出震惊。镜头固定，捕捉她的惊讶。", "vidu": "g13_vidu.mp4", "sd": "g13_sd.mp4", "orient": "portrait"}, {"id": 14, "prompt": "【人物】秦筝（右，持枪坐）、安保员 A（左，站立）、安保员 B（左后）、乘客（散落在场）、苏晓（左后，被制服） 特写｜秦筝手中格洛克枪口迸发火光，慢镜头收尾，画面切正常速度 特写｜安保员 A 胸前炸开两团血花，面露错愕、瞳孔收缩、嘴唇微张，直挺挺向后倒地 3.0-4.5s 中景｜安保员 B 来不及反应，额头正中浮现血洞，身体僵直后向后仰倒 全景｜乘客集体尖叫，人群四散奔逃、有人抱头蹲伏，镜头轻微晃动烘托混乱氛围 中景｜秦筝从右侧起身，踢开脚边行李，环视慌乱人群，面带浅笑，眼神冰冷残忍 近景｜秦筝移至画面中心，嘴角噙笑轻声开口：「真是麻烦。」语气淡然，尾音裹挟不耐 特写｜秦筝目光锁定呆立的苏晓，缓缓抬枪，枪口对准对方 主观视角（苏晓）｜画面剧烈旋转、影像模糊，最终定格在秦筝举枪的冷酷眼眸", "vidu": "g14_vidu.mp4", "sd": "g14_sd.mp4", "orient": "portrait"}];
+const app = document.getElementById('app');
+const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const el = h => { const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstElementChild; };
+
+GROUPS.forEach(g=>{
+  const row = el(`
+    <article class="row">
+      <div class="row-head">
+        <div class="idx">${String(g.id).padStart(2,'0')}</div>
+        <div class="prompt-block">
+          <span class="ptag">Prompt</span>
+          <p class="prompt">${esc(g.prompt)}</p>
+        </div>
+      </div>
+      <div class="pair${g.orient==='portrait'?' portrait':''}">
+        <figure class="clip">
+          <figcaption><span class="name vidu">Vidu</span><span class="sub">Q3 直出</span></figcaption>
+          <div class="frame"><video src="videos/${g.vidu}" preload="none" muted playsinline controls></video></div>
+        </figure>
+        <figure class="clip">
+          <figcaption><span class="name sd">Seedance 2.0</span><span class="sub">对照</span></figcaption>
+          <div class="frame"><video src="videos/${g.sd}" preload="none" muted playsinline controls></video></div>
+        </figure>
+      </div>
+      <div class="ctrl">
+        <button class="b-sync">▷ 同步播放</button>
+        <button class="b-replay">↺ 重播</button>
+        <span class="tip">两段从头对齐播放</span>
+      </div>
+    </article>`);
+
+  const [a,b] = row.querySelectorAll('video');
+  const sync = row.querySelector('.b-sync');
+  const bothPaused = ()=> a.paused && b.paused;
+  const update = ()=> sync.textContent = bothPaused() ? '▷ 同步播放' : '❚❚ 暂停';
+  const playBoth = reset => { if(reset){a.currentTime=0;b.currentTime=0;} a.play(); b.play(); };
+
+  sync.addEventListener('click', ()=> bothPaused() ? playBoth(true) : (a.pause(),b.pause()));
+  row.querySelector('.b-replay').addEventListener('click', ()=> playBoth(true));
+  [a,b].forEach(v=>['play','pause','ended'].forEach(e=>v.addEventListener(e,update)));
+
+  app.appendChild(row);
+});
+
+// 滚动到附近才拉首帧，避免一次性请求全部视频
+const io = new IntersectionObserver((es)=>es.forEach(e=>{
+  if(e.isIntersecting){ e.target.querySelectorAll('video').forEach(v=>v.preload='metadata'); io.unobserve(e.target); }
+}), {rootMargin:'500px 0px'});
+document.querySelectorAll('.row').forEach(r=>io.observe(r));
+
+document.getElementById('b-groups').textContent = GROUPS.length;
+document.getElementById('b-videos').textContent = GROUPS.length*2;
+document.getElementById('foot-meta').textContent = `${GROUPS.length} 组 · ${GROUPS.length*2} 段视频 · 生成于 2026-07-01`;
+</script>
+</body>
+</html>

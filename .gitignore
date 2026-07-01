@@ -1,0 +1,5 @@
+build/videos_original/
+.claude/
+.DS_Store
+node_modules/
+*.log
