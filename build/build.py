@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""把 site_data.json 的 14 组对比数据注入 template.html，生成 public/index.html。
+"""把 site_data.json（14 组对比）+ summary.json（整体结论）注入 template.html，生成 public/index.html。
 每组用 ffprobe 判定横/竖版，供页面自适应容器比例。
 用法: python3 build/build.py"""
 import json, pathlib, subprocess
@@ -7,6 +7,7 @@ import json, pathlib, subprocess
 base = pathlib.Path(__file__).resolve().parent
 videos = base.parent / 'public' / 'videos'
 data = json.load(open(base / 'site_data.json', encoding='utf-8'))
+summary = json.load(open(base / 'summary.json', encoding='utf-8'))
 
 def orient(fname):
     """返回 'portrait' 或 'landscape'（读不到时默认 landscape）。"""
@@ -21,13 +22,17 @@ def orient(fname):
         return 'landscape'
 
 slim = [{'id': d['id'], 'prompt': d['prompt'], 'vidu': d['vidu'], 'sd': d['sd'],
-         'orient': orient(d['vidu'])} for d in data]
+         'orient': orient(d['vidu']), 'advantage': d.get('advantage', '')} for d in data]
 
 tpl = open(base / 'template.html', encoding='utf-8').read()
 out = tpl.replace('/*__DATA__*/ []', json.dumps(slim, ensure_ascii=False))
+out = out.replace('/*__SUMMARY__*/ {}', json.dumps(summary, ensure_ascii=False))
 
 target = base.parent / 'public' / 'index.html'
 target.parent.mkdir(parents=True, exist_ok=True)
 open(target, 'w', encoding='utf-8').write(out)
 np = sum(1 for s in slim if s['orient'] == 'portrait')
-print(f'✓ 生成 {target} （{len(slim)} 组：{np} 竖版 / {len(slim)-np} 横版，{len(out)} 字节）')
+na = sum(1 for s in slim if s['advantage'])
+print(f'✓ 生成 {target}')
+print(f'  {len(slim)} 组：{np} 竖版 / {len(slim)-np} 横版，{na} 组带优势注解')
+print(f'  结论表 {len(summary["dimensions"])} 个维度')

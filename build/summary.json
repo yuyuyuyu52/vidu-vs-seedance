@@ -1,0 +1,40 @@
+{
+ "core": "核心结论： Vidu 在模型能力对标 Seedance 2.0 的基础上，价格仅为后者的 20%~70%，生成速度领先约 5 倍，综合性价比优势显著。",
+ "dimensions": [
+  {
+   "name": "一致性保持",
+   "verdict": "持平",
+   "note": "Vidu 参考生在人脸、场景一致性上表现扎实，可对标 Seedance 2.0 。"
+  },
+  {
+   "name": "音视频氛围感",
+   "verdict": "Vidu 领先",
+   "note": "音视频直出的氛围感优于 Seedance 2.0。"
+  },
+  {
+   "name": "镜头控制",
+   "verdict": "持平",
+   "note": "支持智能切镜、可控运镜,可对标 Seedance 2.0。"
+  },
+  {
+   "name": "场景化能力",
+   "verdict": "Vidu 领先",
+   "note": "端到端场景能力全面领先: 广告:一键成片、爆款复刻、模型微调 AI 剧:直出解说剧、提示词增强、对话增强"
+  },
+  {
+   "name": "服务体系",
+   "verdict": "Vidu 领先",
+   "note": "提供定制化、模型微调、专业培训等深度服务; 形态覆盖 Skills / API / Agent / MCP / SaaS。"
+  },
+  {
+   "name": "长时长 & 大动态",
+   "verdict": "Seedance 2.0 略优",
+   "note": "Vidu 在 10s+ 直出或大动态场景下抽卡率会低于 Seedance 2.0,建议适当缩短分镜时长; Seedance 2.0 多次请求的抽卡率波动较大； 综合抽卡率与成本,Vidu 性价比仍明显占优。"
+  },
+  {
+   "name": "产品定价",
+   "verdict": "Vidu 领先",
+   "note": "性价比大幅优于 Seedance 2.0,详见下方定价与速度对比。"
+  }
+ ]
+}
